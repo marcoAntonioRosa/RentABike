@@ -11,6 +11,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Reference Include="AWSSDK.SQS">
+        <HintPath>..\..\..\..\.nuget\packages\awssdk.sqs\3.7.301.27\lib\net8.0\AWSSDK.SQS.dll</HintPath>
+      </Reference>
       <Reference Include="Microsoft.AspNetCore.Http.Features">
         <HintPath>..\..\..\..\..\..\usr\lib\dotnet\shared\Microsoft.AspNetCore.App\8.0.5\Microsoft.AspNetCore.Http.Features.dll</HintPath>
       </Reference>

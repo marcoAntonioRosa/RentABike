@@ -25,6 +25,7 @@ public static class DependencyInjection
         services.AddScoped<IDeliveryPersonService, DeliveryPersonService>();
         services.AddSingleton<IImageService, ImageService>();
         services.AddSingleton<IJwtService, JwtService>();
+        services.AddSingleton<IMessagePublisherService, MessagePublisherService>();
     }
 
     private static void AddUserAuthentication(this IServiceCollection services, IConfiguration configuration)

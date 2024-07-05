@@ -1,10 +1,10 @@
 using Amazon.S3;
-using Microsoft.AspNetCore.Identity;
+using Amazon.SQS;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RentABike.Domain.Entities;
 using RentABike.Domain.Interfaces;
+using RentABike.Infrastructure.BackgroundServices;
 using RentABike.Infrastructure.Persistence;
 using RentABike.Infrastructure.Persistence.Repositories;
 
@@ -15,9 +15,8 @@ public static class DependencyInjection
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddPersistence(configuration);
-        services.AddImageStorage(configuration);
-
-        // services.AddIdentity<User, IdentityRole>();
+        services.AddImageStorage();
+        services.AddMessageQueue();
     }
 
     private static void AddPersistence(this IServiceCollection services, IConfiguration configuration)
@@ -31,8 +30,14 @@ public static class DependencyInjection
         services.AddScoped<IDeliveryPersonRepository, DeliveryPersonRepository>();
     }
 
-    private static void AddImageStorage(this IServiceCollection services, IConfiguration configuration)
+    private static void AddImageStorage(this IServiceCollection services)
     {
         services.AddSingleton<IAmazonS3, AmazonS3Client>();
+    }
+
+    private static void AddMessageQueue(this IServiceCollection services)
+    {
+        services.AddSingleton<IAmazonSQS, AmazonSQSClient>();
+        services.AddHostedService<SqsConsumerService>();
     }
 }
