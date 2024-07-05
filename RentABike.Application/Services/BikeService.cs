@@ -6,7 +6,10 @@ using RentABike.Domain.Interfaces;
 
 namespace RentABike.Application.Services;
 
-public class BikeService(IBikeRepository bikeRepository, IRentRepository rentRepository) : IBikeService
+public class BikeService(
+    IBikeRepository bikeRepository, 
+    IRentRepository rentRepository,
+    IMessagePublisherService messagePublisherService) : IBikeService
 {
     public async Task CreateBike(BikeDto bikeDto)
     {
@@ -14,11 +17,7 @@ public class BikeService(IBikeRepository bikeRepository, IRentRepository rentRep
         if (bikeAlreadyExists)
             throw new BikeAlreadyExistsException(bikeDto.LicensePlate);
 
-        // if (bike.Year == 2024)
-        //     _logger.LogInformation("This bike is from current year");
-        
-        var newBike = bikeDto.Adapt<Bike>(); 
-        await bikeRepository.Add(newBike);
+        await messagePublisherService.PublishCreationAsync(bikeDto);
     }
 
     public async Task<IEnumerable<BikeDto>> GetAllBikes()
