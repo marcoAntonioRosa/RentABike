@@ -1,7 +1,7 @@
 # Rent A Bike 🏍️💨 Aluguel de motos
 
 ## AWS CLI
-Para que o S3 funcione você vai precisar ter uma conta no AWS. Pode ser uma conta no plano gratuito.
+Para que o S3 e o SQS funcionem, você vai precisar ter uma conta no AWS. Pode ser uma conta no plano gratuito.
 
 Você precisa configurar um usuário no Identity and Access Management (IAM), certifique-se de dar permissão de administrador (AdministratorAccess).
 
@@ -11,17 +11,22 @@ Instale o AWS CLI (aws.amazon.com/cli) e configure com as chaves de acesso que v
 
 Você também vai precisar criar um bucket no S3, guarde o nome do bucket.
 
+Além disso, você também precisa criar duas filas do tipo "padrão" no SQS, guarde o nome das duas
+
 ## Configurando o AppSettings
 Para que a web api funcione é necessário configurar os serviços de infraestrutura no AppSettings
 
-### Conexão com o S3
+### Conexão com o S3 e SQS
 ```json
 "AWS": {
-    "BucketName": "{NOME_DO_BUCKET}" 
+    "BucketName": "{NOME_DO_BUCKET}",
+    "MessageQueues": {
+      "BikeCreation": "{BIKE_CREATION_NOME_FILA}",
+      "BikeNotification": "{BIKE_NOTIFICATION_NOME_FILA}"
+    }
 },
 ```
-
-Importante, o S3 não funcionará se o IAM não estiver configurado.
+Importante, os serviços da Amazon não funcionarão se o IAM não estiver configurado.
 
 ### Conexão com o PostgreSQL
 
